@@ -1,0 +1,205 @@
+<?php
+
+/**
+ *
+ * shortcodes hook implementation
+ *
+ */
+
+function shortcode_lightflows_tags_shortcodes($op, $format = 1, $long = FALSE) {
+	drupal_add_css(drupal_get_path('module', 'shortcode_lightflows_tags') . '/css/shortcode_lightflows.css', 'module', 'all', FALSE);
+
+  switch ($op) {
+    case 'list':
+      // array indexed by the shortcode name
+      return array(
+        'highlight'  => t('Insert a span around the text with highlight css class.'), // use t()!
+        'link'    => t('Makes an aliased link to the given path'),
+        'list'  => t('Insert a link formatted like a button.'), // use t()!
+		'one_third'    => t('Makes a 1/3rd width column'),
+		'two_third'    => t('Makes a 2/3rd width column'),
+		'one_third_last'    => t('Makes the last column 1/3rd width column'),
+		'two_third_last'    => t('Makes the last column 2/3rd width column'),
+		'one_fourth'    => t('Makes a 1/3rd width column'),
+		'one_fourth_last'    => t('Makes a 2/3rd width column'),
+		'one_half'    => t('Makes the last column 1/3rd width column'),
+		'one_half_last'    => t('Makes the last column 2/3rd width column'),
+		'code'    => t('Makes the last column 2/3rd width column'),
+      );
+    break;
+
+    case 'tips':
+      return $output;
+    break;
+
+    default:
+      ;
+    break;
+  }
+
+} // shortcode_shortcodes()
+
+/**
+* Implementation of hook_theme().
+*/
+function shortcode_lightflows_tags_theme() {
+  return array(
+      'shortcode_button' => array(
+        'arguments' => array('$link' => '#', $text => '', $class => 'button'),
+      ),
+      
+       'shortcode_list' => array(
+        'arguments' => array($text => '', $type => '', $class => 'list'),
+      ),
+      
+      'shortcode_quote' => array(
+        'arguments' => array($text => '', $class => 'quote'),
+      ),
+
+      'shortcode_dropcap' => array(
+        'arguments' => array($text => '', $class => 'dropcap'),
+      ),
+
+      'shortcode_item' => array(
+        'arguments' => array($text => '', $id => '', $class => '', $type => 'div'),
+      ),
+
+      'shortcode_clear' => array(
+        'arguments' => array($text => '', $id => '', $class => '', $type => 'div'),
+      ),
+    );
+}
+
+// shortcode implementations
+
+/**
+ * Insert a span around the text with highlight css class
+ *
+ * Calling
+ * [highlight]text[/highlight]
+ *
+ *
+ * If the length empty or invalid, between 1-99, the length will be 8
+ *
+ */
+ 
+function shortcode_lightflows_tags_shortcode_one_third($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-3');
+  return '<div class="' . $class . '"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+function shortcode_lightflows_tags_shortcode_two_third($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-2-3');
+  return '<div class="' . $class . '"><div class="column-inner">' . $text . '</div></div>';
+}
+
+function shortcode_lightflows_tags_shortcode_one_third_last($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-3');
+  return '<div class="' . $class . ' column-last"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+function shortcode_lightflows_tags_shortcode_two_third_last($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-2-3');
+  return '<div class="' . $class . ' column-last"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+
+//* 4 column //
+
+function shortcode_lightflows_tags_shortcode_one_fourth($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-4');
+  return '<div class="' . $class . '"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+function shortcode_lightflows_tags_shortcode_one_fourth_last($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-4');
+  return '<div class="' . $class . ' column-last"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+function shortcode_lightflows_tags_shortcode_one_half($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-2');
+  return '<div class="' . $class . '"><div class="column-inner">' . $text . '</div></div>';
+}
+
+function shortcode_lightflows_tags_shortcode_one_half_last($attrs, $text) {
+  extract( shortcode_attrs( array(
+      'class'  => '',
+      ), $attrs ));
+
+  $class = shortcode_add_class($class, 'column-1-2');
+  return '<div class="' . $class . ' column-last"><div class="column-inner">' . $text . '</div></div>';
+} 
+
+// end 4 column //
+
+function shortcode_lightflows_tags_shortcode_list($attrs, $text) {
+  extract(shortcode_attrs( array(
+      'type' => '',
+      // ...etc
+      ), $attrs ));
+
+  //$class = shortcode_add_class($class, 'quote');
+  $text = $content = str_replace('<ul', '<ul class=' . $type , $text);
+  return $text;
+} // shortcode_basic_tags_shortcode_item();
+
+// code //
+
+function shortcode_lightflows_tags_shortcode_code($attrs,$text)
+{
+		$lines = explode("\n", $text);
+
+		if (trim($lines[0]) == '') {
+			array_shift($lines);
+		}
+		$n = count($lines);
+
+		if (trim($lines[$n - 1]) == '') {
+			array_pop($lines);
+			--$n;
+		}
+
+		$return = '<div class="code-container"><div class="code-lines">';
+		for ($i = 1; $i <= $n; ++$i) {
+			$return .='<span>' . ($i < 10 ? '0' : '') . $i . '</span>';
+		}
+
+		$return .= '</div><p><code>';
+		for ($i = 0; $i < $n; ++$i) {
+			$return.='<span>' . trim($lines[$i]) . '</span>';
+		}
+
+		$return .= '</code></p></div>';
+
+		return $return;
+
+}
+

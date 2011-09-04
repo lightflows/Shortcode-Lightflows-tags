@@ -1,0 +1,13 @@
+; $Id:                                        
+name = Shortcode Lightflows Tags                                                                             
+description = Provides basic shortcode tags like highlight, dropcap, etc.                                                       
+package = Shortcode                                                                                              
+core = 6.x
+dependencies[] = filter
+dependencies[] = shortcode
+; Information added by drupal.org packaging script on 2011-07-20
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "shortcode"
+datestamp = "1311122240"
+
